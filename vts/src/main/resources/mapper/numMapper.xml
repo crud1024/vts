@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.crud1024.dao.NumMapper">
+	<!-- 实现NumMapper接口中的所有方法的sql实现 -->
+
+	<insert id="insertNum">
+		INSERT INTO `vtsdb`.`num` (`n_gid`, `nnum`, `ntf`)
+		VALUES (#{n_gid}, #{nnum}, #{ntf})
+	</insert>
+	<update id="updateNum">
+		UPDATE `vtsdb`.`num` SET `n_gid` = #{n_gid}, `nnum` =
+		#{nnum}, `ntf` = #{ntf} WHERE `nid` = #{nid}
+	</update>
+	<delete id="delectNum">
+		DELETE FROM `vtsdb`.`num` WHERE `nid` = #{nid}
+	</delete>
+	<!-- 通过场次查询得到该场次的两支队伍单局获胜情况 -->
+	<select id="findOfANum" parameterType="Integer"
+		resultType="xyz.crud1024.pojo.Num">
+		SELECT
+		num.nid,
+		num.n_gid,
+		num.nnum,
+		num.ntf
+		FROM
+		num
+		WHERE
+		num.nnum = #{nnum}
+	</select>
+	<!-- 通过队伍id查询得到该支队伍单局获胜情况-获胜局数 -->
+	<select id="findOfAGroupNum"
+		parameterType="xyz.crud1024.pojo.Num"
+		resultType="xyz.crud1024.pojo.Num">
+		SELECT
+		num.nid,
+		num.n_gid,
+		num.nnum,
+		num.ntf
+		FROM
+		num
+		WHERE
+		num.n_gid = {n_gid}
+	</select>
+
+	<select id="findOfAllNum" parameterType="Integer"
+		resultType="xyz.crud1024.pojo.Num">
+		SELECT
+		num.nid,
+		num.n_gid,
+		num.nnum,
+		num.ntf
+		FROM
+		num
+	</select>
+</mapper>

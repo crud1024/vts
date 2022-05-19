@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.crud1024.dao.ScoreMapper">
+	<!-- 实现ScoreMapper接口中的所有方法的sql实现 -->
+	<insert id="insertScore">
+		INSERT INTO `vtsdb`.`score` (`snum`, `s_gid`,
+		`s_pid`, `s_cid`) VALUES
+		(#{snum}, #{s_gid}, #{s_pid}, #{s_cid})
+	</insert>
+	<update id="updateScore">
+		UPDATE `vtsdb`.`score` SET `sid` = #{sid}, `snum` =
+		#{snum}, `s_gid` = #{s_gid}, `s_pid` = #{s_pid} WHERE `sid` = #{sid}
+	</update>
+	<delete id="delectScore">
+		DELETE FROM `vtsdb`.`score` WHERE `sid` = #{sid}
+	</delete>
+	<select id="findOfAScore" parameterType="int"
+		resultType="xyz.crud1024.pojo.Score">
+		SELECT
+		score.sid,
+		score.snum,
+		score.s_gid,
+		score.s_pid
+		FROM
+		score
+		WHERE
+		score.s_pid = #{s_pid}
+	</select>
+	<select id="findOfAllNum" parameterType="int"
+		resultType="xyz.crud1024.pojo.Score">
+		SELECT
+		score.s_cid
+		FROM
+		score
+		WHERE
+		score.s_gid = #{s_pid}
+		GROUP
+		BY
+		score.s_cid
+	</select>
+	<select id="findOfGroupOfScore" parameterType="int"
+		resultType="xyz.crud1024.pojo.Score">
+		SELECT
+		score.sid,
+		score.snum,
+		score.s_gid,
+		score.s_pid
+		FROM
+		score
+		WHERE
+		score.s_gid = #{s_gid}
+	</select>
+	<select id="findOfGroupAndNumAndPersonOfScore"
+		parameterType="xyz.crud1024.pojo.Score"
+		resultType="xyz.crud1024.pojo.Score">
+		SELECT
+		score.s_pid,
+		SUM(score.snum) AS snum
+		FROM
+		score
+		WHERE
+		score.s_cid = #{s_cid} AND
+		score.s_gid = #{s_gid}
+		GROUP BY
+		score.s_pid
+	</select>
+	<select id="findOfPersonAndNumOfScore"
+		parameterType="xyz.crud1024.pojo.Score"
+		resultType="xyz.crud1024.pojo.Score">
+		SELECT
+		score.sid,
+		score.snum,
+		score.s_gid,
+		score.s_pid,
+		score.s_cid
+		FROM
+		score
+		WHERE
+		score.s_pid = #{s_pid} AND
+		score.s_cid =
+		#{s_cid}
+	</select>
+	<select id="findOfGroupAndNumOfScore"
+		parameterType="xyz.crud1024.pojo.Score"
+		resultType="xyz.crud1024.pojo.Score">
+		SELECT
+		score.sid,
+		score.snum,
+		score.s_gid,
+		score.s_pid,
+		score.s_cid
+		FROM
+		score
+		WHERE
+		score.s_gid = #{s_gid} AND
+		score.s_cid =
+		#{s_cid}
+	</select>
+	<select id="findOfAllScore" resultType="xyz.crud1024.pojo.Score">
+		SELECT
+		score.sid,
+		score.snum,
+		score.s_gid,
+		score.s_pid
+		FROM
+		score
+	</select>
+</mapper>

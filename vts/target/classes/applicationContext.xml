@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+	<!-- 开启注解 -->
+	<context:component-scan base-package="xyz.crud1024" />
+
+	<!-- 数据源 -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/vtsdb?serverTimezone=UTC" />
+		<property name="username" value="root" />
+		<property name="password" value="admin" />
+	</bean>
+
+	<!-- SqlSessionFactoryBean 得到factory对象需要mybatis-config.xml文件 1、导入数据源（必填） 
+		2、导入映射文件的位置（必填） 3、导入mybatis主配置文件（选填） 这个类的作用相当于： inputStream = Resources.getResourceAsStream("mybatis-config.xml"); 
+		SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder(); SqlSessionFactory 
+		factory = builder.build(inputStream); SqlSession sqlSession = factory.openSession(); -->
+	<bean id="factory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations"
+			value="classpath*:mapper/*.xml" />
+		<property name="configLocation"
+			value="classpath:mybatis-config.xml" />
+	</bean>
+
+	<!-- MapperScannerConfigurer 作用：自动扫描指定的包，找到里面的接口，并根据类型创建相应的代理 相当于 UserDAO 
+		userDAO = sqlSession.getMapper(UserDAO.class); -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="xyz.crud1024.dao" />
+	</bean>
+
+	<!-- 配置事务 -->
+	<!-- 1.DataSourceTransactionManager -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 2..配置事务管理的策略 name="*" 表示事务要管理的方法，是service中的任意方法。也可以写具体方法名称（如transfer），也可以写部分方法名称（如add*）。 
+		isolation="DEFAULT" 表示事务的隔离级别是数据库的默认隔离级别，MySQL的默认隔离级别是可重复读。 propagation="REQUIRED" 
+		表示事务的传播行为是当前方法的调用必须要由事务进行管理。 -->
+	<tx:advice id="txAdvice"
+		transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" isolation="DEFAULT"
+				propagation="REQUIRED" read-only="false" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- 3. 配置AOP -->
+	<aop:config>
+		<aop:pointcut
+			expression="execution(* xyz.crud1024.service.*.*(..))" id="pc1" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pc1" />
+	</aop:config>
+
+
+
+</beans>
+
+
+
+
+

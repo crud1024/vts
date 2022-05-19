@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.crud1024.dao.PersonMapper">
+	<!-- 实现PersonMapper接口中的所有方法的sql实现 -->
+
+	<insert id="insertPerson">
+		INSERT INTO `vtsdb`.`person` (`pid`, `pname`, `purl`,
+		`p_gid`) VALUES (#{pid},#{pname},#{purl},#{p_gid})
+	</insert>
+	<update id="updatePerson">
+		UPDATE `vtsdb`.`person` SET `pid` = #{pid}, `pname` =
+		#{pname}, `purl` = #{purl}, `p_gid` = #{p_gid} WHERE `pid` = #{pid}
+	</update>
+	<delete id="delectPerson">
+		DELETE FROM `vtsdb`.`person` WHERE `pid` = #{pid}
+	</delete>
+	<select id="findOfAPerson" parameterType="Integer"
+		resultType="xyz.crud1024.pojo.Person">
+		SELECT
+		person.pid,
+		person.pname,
+		person.purl,
+		person.p_gid
+		FROM
+		person
+		WHERE
+		person.pid = #{pid}
+	</select>
+
+	<select id="findOfGroupOfPerson" parameterType="Integer"
+		resultType="xyz.crud1024.pojo.Person">
+		SELECT
+		person.pid,
+		person.pname,
+		person.purl,
+		person.p_gid
+		FROM
+		person
+		WHERE
+		person.p_gid = #{p_gid}
+	</select>
+
+	<select id="findOfAllPerson"
+		resultType="xyz.crud1024.pojo.Person">
+		SELECT
+		person.pid,
+		person.pname,
+		person.purl,
+		person.p_gid
+		FROM
+		person
+	</select>
+</mapper>

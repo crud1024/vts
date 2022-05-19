@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.crud1024.dao.GroupMapper">
+	<!-- 实现GroupMapper接口中的所有方法的sql实现 -->
+	<insert id="insertGroup">
+		INSERT INTO `vtsdb`.`group` (`gid`, `gname`, `gurl`) VALUES (#{gid},
+		#{gname}, #{gurl})
+	</insert>
+	<update id="updateGroup">
+		UPDATE `vtsdb`.`group` SET `gid` = #{gid}, `gname` = #{gname}, `gurl` =
+		#{gurl} WHERE `gid` = #{gid}
+	</update>
+	<delete id="delectGroup">
+		DELETE FROM `vtsdb`.`group` WHERE `gid` = #{gid}
+	</delete>
+	<select id="findOfAGroup" parameterType="int"
+		resultType="xyz.crud1024.pojo.Group">
+		SELECT
+		`group`.gid,
+		`group`.gname,
+		`group`.gurl
+		FROM
+		`group`
+		WHERE
+		`group`.gid = #{gid}
+	</select>
+	<select id="findOfAllGroup" resultType="xyz.crud1024.pojo.Group">
+		SELECT
+		`group`.gid,
+		`group`.gname,
+		`group`.gurl
+		FROM
+		`group`
+	</select>
+</mapper>

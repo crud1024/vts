@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <display-name>vts</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+ <!-- 配置文件加载 -->
+ <context-param>
+ 	<param-name>contextConfigLocation</param-name>
+ 	<param-value>classpath:application*.xml</param-value>
+ </context-param>
+ <!-- 容器加载的监听器 -->
+ <listener>
+ 	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+ </listener>
+  <!-- 配置spring mvc 的前端控制器 -->
+<servlet>
+	<servlet-name>DispatcherServlet</servlet-name>
+	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	<!-- 配置初始化参数，用于读取springmvc的配置文件 -->
+	<init-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring-mvc.xml</param-value>
+	</init-param>
+	<!-- 应用加载时创建 -->
+	<load-on-startup>1</load-on-startup>
+</servlet>
+<servlet-mapping>
+	<servlet-name>DispatcherServlet</servlet-name>
+	<url-pattern>/</url-pattern>
+</servlet-mapping>
+</web-app>
